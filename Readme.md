@@ -1,6 +1,6 @@
-|                                                  | Raspberry-Pack                                                                                                                                                                                                                                |
-| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ![raspberry-pack.png](assets/raspberry-pack.png) | **Why Raspberry-Pack:** Don't flash each Raspberry Pi by hand, but automate things and make it reusable, and all that headlessly: No keyboard, no mouse, no monitor, no ssh needed.<br><br> **Setup headless, easier, faster, reproducible.** |
+|                                                  | Raspberry-Pack                                                                                                                                                                                                                        |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![raspberry-pack.png](assets/raspberry-pack.png) | **Why Raspberry-Pack:** Don't flash each Raspberry Pi by hand, but automate things and make it reusable, and all that headlessly: No keyboard, no mouse, no monitor, no ssh needed.<br><br> **Headless, easy, fast and reproducible** |
 
 ![CLI](assets/example-cli.png)
 
@@ -8,7 +8,7 @@
 
 - Raspberry-Pack is designed for use with [Raspberry Pi](http://www.raspberrypi.org) version 1-4
 
-## The step by step wizard guides you through the installation process:
+## The step by step wizard guides you through the installation process
 
 - download raspbian image
 - select package
@@ -17,7 +17,7 @@
 - informs you when the install is done
 - helps how to connect to it via ssh (not required)
 
-## Getting started:
+## Getting started
 
 ```
 # install Raspberry-Pack tool
@@ -85,7 +85,7 @@ Create a folder inside `packages/`. Each package name has the prefix `raspberry-
 
 - Our logo is a remix of the trademark's logo of [Raspberry Pi](http://www.raspberrypi.org)
 - Raspberry-Pack is no official product of Raspberry Pi
-- Next to our licence also check their [Trademark Rules](https://www.raspberrypi.org/trademark-rules/)
+- Next to our license also check their [Trademark Rules](https://www.raspberrypi.org/trademark-rules/)
 
 ## Your contribution
 

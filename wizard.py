@@ -20,7 +20,7 @@ def printIntro():
     os.system("cat ./assets/raspberry-pack.art")
     print("\nRaspberry-Pack helps you to setup your Raspberry in no time.\nNo keyboard, mouse, monitor or ssh needed!\n\n This tool helps to:\n ═══════════════════\n 1.) Download the newest raspbian image\n 2.) Select a pre-configured package\n 3.) flash your SD card\n 4.) informs you, when everything is done\n 5.) gives you the RPi`s IP and hostname so you can SSH into it\n")
     print(" (To navigate use arrow keys, enter and space)")
-    print(" (Don't use mouse clicks! ¯\_(ツ)_ /¯ issue: # 10)\n")
+    print(" (Don't use mouse clicks! ¯\_(ツ)_ /¯ issue: #6)\n")
     print("Make sure you have inserted an SD card.")
 
 
