@@ -1,0 +1,1 @@
+Plain RPi: installs git gcc g++ make python-pip
