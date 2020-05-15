@@ -2,9 +2,20 @@
 | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![raspberry-pack.png](assets/raspberry-pack.png) | **Why Raspberry-Pack:** Don't flash each Raspberry Pi by hand, but automate things and make it reusable, and all that headlessly: No keyboard, no mouse, no monitor, no ssh needed.<br><br> **Setup headless, easier, faster, reproducible.** |
 
+![CLI](assets/example-cli.png)
+
 # How to use Raspberry-Pack
 
 - Raspberry-Pack is designed for use with [Raspberry Pi](http://www.raspberrypi.org) version 1-4
+
+## The step by step wizard guides you through the installation process:
+
+- download raspbian image
+- select package
+- flash to SD
+- boot your RPi
+- informs you when the install is done
+- helps how to connect to it via ssh (not required)
 
 ## Getting started:
 
