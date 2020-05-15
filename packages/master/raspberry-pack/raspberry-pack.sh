@@ -2,6 +2,9 @@
 
 log () { printf "\e[93m%b\e[0m" "\n=== Raspberry-Pack: $1 ===\n"; }
 
+# led the led blink until script is completely done
+echo timer | sudo tee /sys/class/leds/led0/trigger
+
 log "Mount drive for write access"
 mount -rw -o remount /
 sleep 3
@@ -92,6 +95,9 @@ if [ -f /boot/raspberry-pack/run-after-boot.sh ]; then
     log "Start scripts after signal"
     /boot/raspberry-pack/run-after-boot.sh
 fi
+
+# reset led to default behavior
+echo mmc0 | sudo tee /sys/class/leds/led0/trigger
 
 log "Restart in 3 seconds"
 sleep 3
