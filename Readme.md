@@ -27,7 +27,7 @@ pip install PyInquirer
 python wizard.py
 ```
 
-- **Raspberry-Pack relies on Python 3, try using `pip3` and `python3` when encountering issues**
+- **Raspberry-Pack relies on [Python 3](https://docs.python-guide.org/starting/install3/osx/), try using `pip3` and `python3` when encountering issues**
 - **MAC/OSX supported only (No Windows or Linux support)**
 
 ## Create your own Raspberry-Pack

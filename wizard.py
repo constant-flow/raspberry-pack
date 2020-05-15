@@ -253,7 +253,7 @@ def setHostname():
         {
             'type': 'input',
             'name': 'hostname',
-            'message': '🏷  What the hostname for this Raspberry?',
+            'message': '🏷  What\'s the hostname for this Raspberry?',
             'default': hostname
         }
     ]
@@ -283,7 +283,7 @@ def setPassword():
         {
             'type': 'input',
             'name': 'password',
-            'message': '🔐 What the password for this Raspberry?',
+            'message': '🔐 What\'s the password for this Raspberry?',
             'default': password
         }
     ]
