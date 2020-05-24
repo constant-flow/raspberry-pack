@@ -1,9 +1,11 @@
+### Raspberry-Pack ###
 **.img
 **.zip
 
 **/wpa_supplicant.conf
 
 **/untested
+**/ip_of_master.conf
 
 # Created by https://www.gitignore.io/api/linux,macos,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=linux,macos,visualstudiocode

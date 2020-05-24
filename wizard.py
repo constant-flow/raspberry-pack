@@ -184,9 +184,31 @@ def flashDrive():
 
 
 def waitForRaspberryToRespond():
-    print("\n\n🥚 Waiting for the Raspberry Pi to complete the installation\n(This can take several minutes): ...\n")
-    cmdWaitForNetcarResponse = "nc -lu 13337"
-    os.system(cmdWaitForNetcarResponse)
+    print("\n\n🥚 Waiting for the Raspberry-Pack to complete the installation\n(All in all this takes several minutes): ...\n")
+    print("Soon you should see the live-feed from the Raspberry Pi's logs: (This can take more than 3 minutes)\n")
+    cmdWaitForLiveLog = "nc -l 2000"
+
+    # log injection phase
+    print("Live: injection phase")
+    os.system(cmdWaitForLiveLog)
+
+    print("\nLive: installing phase")
+    # log installation phase
+    os.system(cmdWaitForLiveLog)
+
+
+# reads the currents networks address and stores it into a file which will be pushed to the RPi
+def setMasterIpFile():
+    os.chdir(startLocation)
+    os.chdir("packages/" + packageAnswer['package'] + "raspberry-pack/")
+
+    stream = os.popen('ipconfig getifaddr en0')
+    ipOfMaster = stream.read()
+
+    ipFile = open('ip_of_master.conf', 'w+')
+    ipFile.write(ipOfMaster)
+    ipFile.truncate()
+    ipFile.close()
 
 
 def setWiFiCredentials():
@@ -271,7 +293,6 @@ def setHostname():
 def setPassword():
     passwordFilePath = './user-password.conf'
     os.chdir(startLocation)
-
     os.chdir("packages/" + packageAnswer['package']+"raspberry-pack/")
 
     password = "raspberrypack"
@@ -318,6 +339,8 @@ setHostname()
 
 setPassword()
 hl()
+
+setMasterIpFile()
 
 volumeAnswer = selectDisk()
 hl()
