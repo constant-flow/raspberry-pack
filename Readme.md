@@ -92,9 +92,3 @@ Create a folder inside `packages/`. Each package name has the prefix `raspberry-
 - You are welcome to submit merge requests for packages you created and consider useful for a broader audience
 - Found a bug, report it as an issue
 - If you port it for windows / linux, we are more than happy to provide it to everyone 🤗
-
-### Donation
-
-In case you like Raspberry Pack and want to support the project financially you can donate as the project is created in free time
-
-[![Donate with PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZDMVW94NZ84GU)
