@@ -21,7 +21,7 @@
 
 ```
 # install Raspberry-Pack tool
-pip install PyInquirer
+pip install -r requirements.txt
 
 # run Raspberry-Pack wizard
 python wizard.py
