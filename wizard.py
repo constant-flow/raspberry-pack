@@ -18,54 +18,66 @@ def printIntro():
     os.chdir(startLocation)
     os.system('clear')
     os.system("cat ./assets/raspberry-pack.art")
-    print("\nRaspberry-Pack helps you to setup your Raspberry in no time.\nNo keyboard, mouse, monitor or ssh needed!\n\n This tool helps to:\n ═══════════════════\n 1.) Download the newest raspbian image\n 2.) Select a pre-configured package\n 3.) flash your SD card\n 4.) informs you, when everything is done\n 5.) gives you the RPi`s IP and hostname so you can SSH into it\n")
+    print("\nRaspberry-Pack helps you to setup your Raspberry in no time.\nNo keyboard, mouse, monitor or ssh needed!\n\n This tool helps to:\n ═══════════════════\n 1.) Download the newest OS image\n 2.) Select a pre-configured package\n 3.) flash your SD card\n 4.) informs you, when everything is done\n 5.) gives you the RPi`s IP and hostname so you can SSH into it\n")
     print(" (To navigate use arrow keys, enter and space)")
     print(" (Don't use mouse clicks! ¯\_(ツ)_ /¯ issue: #6)\n")
     print("Make sure you have inserted an SD card.")
 
 
+imagesToInstall = ["https://downloads.raspberrypi.org/raspios_lite_armhf_latest", "https://downloads.raspberrypi.org/raspios_armhf_latest", "https://downloads.raspberrypi.org/raspios_full_armhf_latest", "Cancel"]
+
 def checkForFlashableImage():
     os.chdir(startLocation)
     imageExists = os.path.exists('./scripts/raspberry-pack.img')
+
+    downloadFreshImage = False
+    versionHint = "No version recorded, better reinstall"
+
+    import subprocess
+    imageVersionPath = './scripts/raspberry-pack.img.version'
+    imageVersionExists = os.path.exists(imageVersionPath)
+
+    if imageVersionExists:
+        versionHint = subprocess.check_output('cat '+imageVersionPath, shell=True).decode('UTF-8').rstrip()
 
     if imageExists:
         refreshExistingImage = [
             {
                 'type': 'confirm',
-                'message': "🗑️  An existing Raspbian image was found.\n     Do you want to download the most recent version of Raspbian?",
+                'message': "🗑️  An existing OS image was found (version: "+versionHint+").\n     Do you want to download the most recent or a different OS version?",
                 'name': 'refreshImage',
                 'default': False,
             },
         ]
         refreshImage = prompt(refreshExistingImage)
 
-        if refreshImage['refreshImage']:
-            os.chdir("./scripts")
-            os.system('rm raspberry-pack.img')
-            os.system('./download-image.sh')
-            os.system('python upgrade-image.py')
-    else:
+        downloadFreshImage = refreshImage['refreshImage']
+
+    if not imageExists or downloadFreshImage:
+        hl()
         downloadQuestion = [
             {
-                'type': 'confirm',
-                'name': 'downloadQuestion',
-                'message': '📥 No Raspbian image found. Do you want to download it?\n     (You need around 3 GB of free disk space)',
-                'default': True
+                'type': 'list',
+                'name': 'imageUrl',
+                'message': '📥 Which OS version to install?\n     (You need around 3 GB of free disk space)',
+                'choices': imagesToInstall
             },
         ]
-        doDownload = prompt(downloadQuestion)
+        imageDownload = prompt(downloadQuestion)
 
-        if doDownload['downloadQuestion']:
-            print("\n Start Download:\n ═══════════════\n")
-            os.chdir("./scripts")
-            os.system('./download-image.sh')
-            os.system('python upgrade-image.py')
-        else:
+        if imageDownload['imageUrl'] == 'Cancel':
             hl()
             print(
                 "❌ Raspberry-Pack installation was canceled. Free up space and come back.")
             hl()
             sys.exit()
+        else:
+            url = imageDownload['imageUrl']
+            print("\n Start Download:\n ═══════════════\n")
+            os.chdir("./scripts")
+            os.system('./download-image.sh -url ' + url)
+            os.system('python upgrade-image.py')
+
 
 
 def shortenPackagePlusDescripton(p):
