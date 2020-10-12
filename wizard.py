@@ -98,9 +98,7 @@ packageDescriptionSeparator = " -> "
 def selectPackage():
     os.chdir(startLocation)
     os.chdir("./packages")
-    packages = glob.glob("**/")
-    packages.remove('master/')
-    packages.remove('untested/')
+    packages = glob.glob("raspberry-pack-*/")
 
     packages = map(shortenPackagePlusDescripton, packages)
 
