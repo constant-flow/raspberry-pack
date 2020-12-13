@@ -44,9 +44,11 @@ Create a folder inside `packages/`. Each package name has the prefix `raspberry-
 | `📦/autologin.conf`        |          | when this file exists, the system will login automatically (CLI/GUI)                                    |
 | `📦/no-update.conf`        |          | when this file exists, the system will not update system packages (only use during development)         |
 | `📦/update-only.conf`      |          | when this file exists, the system will only update system packages                                      |
+| `📦/enable-vnc.conf`       |          | when this file exists, the system will be connectable via VNC (virtual Network Computing)               |
 | `📦/run-before-boot.sh`    |          | script to run when the SD flashing is done. Executed on your Mac, e.g. to alter the config.txt on SD    |
 | `📦/run-on-boot.sh`        |          | script to run after updating and installing apt packages                                                |
 | `📦/run-after-boot.sh`     |          | script to run after the "installation done"-signal. Useful, when connection will drop                   |
+| `📦/service-starter.sh`    |          | when this file exists, this script is called via a service at every boot of the Raspberry               |
 | `📦/*`                     |          | add all your files you need for your script in here. In your script you can access it here `/boot/📦/*` |
 
 > 📦 = `raspberry-pack`
@@ -79,7 +81,6 @@ Create a folder inside `packages/`. Each package name has the prefix `raspberry-
 - create packages based on sub-packages (user can tick features he wants to have e.g. AP + NodeRed)
 - Add automatically the installers ssh key
 - run ansible script when system is setup
-- enable vnc (`sudo raspi-config nonint do_vnc %d`)
 
 ## Future packages / sub-packages
 
