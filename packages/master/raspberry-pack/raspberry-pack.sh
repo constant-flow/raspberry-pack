@@ -152,6 +152,13 @@ install_raspberry_pack () {
         sleep 1
     fi
 
+    # remove speech-to-text ===================================================
+    if [ -f /boot/raspberry-pack/keep-orca.conf ]; then
+        log "orca will remain on the Raspberry"
+    else
+        log "Found no 'keep-orca.conf' so orca text-2-speech will be removed"
+        sudo apt remove orca -y
+    fi
 
     # run last phase of installation ==========================================
     log "Raspberry-pack installation done"
