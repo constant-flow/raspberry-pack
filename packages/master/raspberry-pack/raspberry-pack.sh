@@ -17,6 +17,14 @@ loadMasterIP () {
     echo $REMOTE_IP
 }
 
+is_installed() {
+    if [ "$(dpkg -l "$1" 2> /dev/null | tail -n 1 | cut -d ' ' -f 1)" != "ii" ]; then
+      return 1
+    else
+      return 0
+    fi
+}
+
 install_raspberry_pack () {
     # led the led blink until script is completely done =======================
     echo timer | sudo tee /sys/class/leds/led0/trigger
@@ -130,11 +138,22 @@ install_raspberry_pack () {
             echo "auto-login: off"
             sudo -u pi sudo raspi-config nonint do_boot_behaviour B3
         fi
+        sudo dpkg-reconfigure lightdm
     fi
-    sudo dpkg-reconfigure lightdm
     sleep 1
 
-    # reboot for clean start ==================================================
+    # enable VNC ==============================================================
+    if [ -f /boot/raspberry-pack/enable-vnc.conf ]; then
+        log "Enable VNC remote connection"
+        if is_installed realvnc-vnc-server || apt-get install realvnc-vnc-server; then
+            sudo systemctl enable vncserver-x11-serviced.service &&
+            sudo systemctl start vncserver-x11-serviced.service
+        fi
+        sleep 1
+    fi
+
+
+    # run last phase of installation ==========================================
     log "Raspberry-pack installation done"
 
     #send udp broadcast to signal the installation is done
@@ -145,6 +164,15 @@ install_raspberry_pack () {
     if [ -f /boot/raspberry-pack/run-after-boot.sh ]; then
         log "Additional script will be started.\n\nThe connection will drop. Wait for the green LED (ACT) to stop flashing, then the installation is done"
         /boot/raspberry-pack/run-after-boot.sh
+    fi
+
+    # register a service to run at every boot of the system
+    if [ -f /boot/raspberry-pack/service-starter.sh ]; then
+        log "Activate the generic service to start 'service-starter.sh'"
+
+        sudo cp /boot/raspberry-pack/raspberry-pack.service /lib/systemd/system/
+        sudo systemctl start raspberry-pack.service
+        sudo systemctl enable raspberry-pack.service
     fi
 
     # reset led to default behavior ===========================================
