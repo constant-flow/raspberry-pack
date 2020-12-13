@@ -15,4 +15,5 @@ unzip temp.zip
 rm temp.zip
 mv *.img raspberry-pack.img
 echo $url > raspberry-pack.img.version
+echo "\aImage download done."
 sleep 3

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-log () { printf "\e[93m%b\e[0m" "\n=== Raspberry-Pack: $1 ===\n"; }
+log () { printf "\e[92m%b\e[0m" "\n=== Raspberry-Pack: $1 ===\n"; }
+error () { printf "\e[91m%b\e[0m" "\n=== Raspberry-Pack: Error: $1 ===\n"; }
+warning () { printf "\e[91m%b\e[0m" "\n=== Raspberry-Pack: Warning: $1 ===\n"; }
 
 init_raspberry_pack ()
 {
@@ -11,7 +13,7 @@ init_raspberry_pack ()
     log "Auto login activated"
 
     # setup raspberry-pack to start on user auto-login
-    printf "\nsudo /boot/raspberry-pack/raspberry-pack.sh" >> /home/pi/.bashrc
+    printf "\necho \"=== raspberry-pack ===\"\nsudo /boot/raspberry-pack/raspberry-pack.sh" >> /home/pi/.bashrc
 
     log "Raspberry-pack added to .bashrc"
     sleep 1
@@ -21,6 +23,7 @@ init_raspberry_pack ()
     sudo sed -i 's+sudo bash /boot/script-starter.sh #new+# By default this script does nothing.+g' /etc/rc.local
     sleep 1
 
+    # remove named pipe
     rm logstream
 
     # reboot
@@ -41,9 +44,24 @@ log "Script starter in action"
 sleep 1
 
 # enable automatic login into pi user account
-
 log "Change to pi user"
 su pi
 
+# make sure network connection is available
+log "Check for network connection"
+CONNECTED=false
+for i in 1 2 3 4 5
+do
+    ping -q -w 1 -c 1 `ip r | grep default | cut -d ' ' -f 3` > /dev/null && CONNECTED=true || CONNECTED=false
+    if [ "$CONNECTED" = true ]; then
+        log "Connected to network"
+        break
+    fi
+    error "no connection. Wait 5 sec ..."
+    sleep 5
+done
+
+# create named pipe to log into that transmits the init_raspberry_pack logs
+log "Transmit the terminal output to: ${REMOTE_IP}"
 mkfifo logstream
 nc $REMOTE_IP 2000 < logstream | init_raspberry_pack &> logstream

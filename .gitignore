@@ -1,5 +1,6 @@
 ### Raspberry-Pack ###
 **.img
+**.img.version
 **.zip
 
 **/wpa_supplicant.conf

@@ -20,7 +20,7 @@ if [ "$1" != "" ]; then
             sleep 1
         done
         printf "\rDONE\n"
-
+        sleep 2
         echo "Mounting disk..."
         diskutil mountDisk /dev/disk$DISK_ID
         echo "Copy files from pack..."
@@ -33,6 +33,7 @@ if [ "$1" != "" ]; then
         fi
         echo "Unmounting disk"
         echo ""
+        sleep 2
         diskutil eject /dev/disk$DISK_ID
         echo ""
         printf '\e[32;5m%-6s\e[m' "NEXT STEP:"

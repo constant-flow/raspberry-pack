@@ -1,6 +1,8 @@
 #!/bin/bash
 
-log () { printf "\e[93m%b\e[0m" "\n=== Raspberry-Pack: $1 ===\n"; }
+log () { printf "\e[92m%b\e[0m" "\n=== Raspberry-Pack: $1 ===\n"; }
+error () { printf "\e[91m%b\e[0m" "\n=== Raspberry-Pack: Error: $1 ===\n"; }
+warning () { printf "\e[91m%b\e[0m" "\n=== Raspberry-Pack: Warning: $1 ===\n"; }
 
 loadMasterIP () {
     if [ -f /boot/raspberry-pack/ip_of_master.conf ]; then
@@ -16,7 +18,7 @@ loadMasterIP () {
 }
 
 install_raspberry_pack () {
-    # led the led blink until script is completely done
+    # led the led blink until script is completely done =======================
     echo timer | sudo tee /sys/class/leds/led0/trigger
 
     log "Mount drive for write access"
@@ -26,16 +28,17 @@ install_raspberry_pack () {
     log "Setup europe time zone"
     sudo timedatectl set-timezone Europe/Berlin
 
-    log "Wait until internet connection"
-
+    # make sure network connection is available ===============================
+    log "Check for network connection"
     CONNECTED=false
     for i in 1 2 3 4 5
     do
         ping -q -w 1 -c 1 `ip r | grep default | cut -d ' ' -f 3` > /dev/null && CONNECTED=true || CONNECTED=false
         if [ "$CONNECTED" = true ]; then
-            echo "Connected to the internet"
+            log "Connected to network"
             break
         fi
+        error "no connection. Wait 5 sec ..."
         sleep 5
     done
 
@@ -45,26 +48,35 @@ install_raspberry_pack () {
         sudo reboot
     fi
 
-    # install newest software packages
-    log "Update / Upgrade software packages"
-    sudo apt-get update && sudo apt-get upgrade -y
-    sleep 1
+    # install newest software packages ========================================
+    if [ -f /boot/raspberry-pack/no-update.conf ]; then
+        warning "No update nor upgrade for system packages! (FAST & DANGEROUS)"
+        sleep 1
+    elif [ -f /boot/raspberry-pack/update-only.conf ]; then
+        log "Update software packages (no upgrade!)"
+        sudo apt-get update -y
+        sleep 1
+    else
+        log "Update / Upgrade software packages"
+        sudo apt-get update && sudo apt-get upgrade -y
+        sleep 1
+    fi
 
-    # Packages needs to be " " separated. Don't use linebreaks!
+    # install packages from master package ====================================
     if [ -f /boot/raspberry-pack/master-apt-get-packages.conf ]; then
         log "Install packages via apt-get"
         sudo apt-get install $(</boot/raspberry-pack/master-apt-get-packages.conf) -y
         sleep 1
     fi
 
-    # Packages needs to be " " separated. Don't use linebreaks!
+    # install packages from selected package ==================================
     if [ -f /boot/raspberry-pack/apt-get-packages.conf ]; then
         log "Install packages via apt-get"
         sudo apt-get install $(</boot/raspberry-pack/apt-get-packages.conf) -y
         sleep 1
     fi
 
-    # Run other scripts you need to install certain things
+    # Run other scripts you need to install certain things ====================
     if [ -f /boot/raspberry-pack/run-on-boot.sh ]; then
         chmod +x /boot/raspberry-pack/run-on-boot.sh
         log "Run defined scripts"
@@ -72,11 +84,11 @@ install_raspberry_pack () {
         sleep 1
     fi
 
-    # Reset /home/pi/.bashrc (remove injected script)
+    # Reset /home/pi/.bashrc (remove injected script) =========================
     sudo sed -i 's+sudo /boot/raspberry-pack/raspberry-pack.sh++g' /home/pi/.bashrc
 
     log "Change user password"
-    # Change the password so it's not using the default
+    # Change the password so it's not using the default =======================
     if [ -f /boot/raspberry-pack/user-password.conf ]; then
         if [ -f /boot/raspberry-pack/change-password.sh ]; then
             /boot/raspberry-pack/change-password.sh
@@ -84,19 +96,45 @@ install_raspberry_pack () {
         fi
     fi
 
-    # Change the hostname of the machine (find it later by <hostname>.local)
+    # Change the hostname of the machine (find it later by <hostname>.local) ==
     if [ -f /boot/raspberry-pack/hostname.conf ]; then
         log "Adjust hostname"
         sudo raspi-config nonint do_hostname $(</boot/raspberry-pack/hostname.conf)
         sleep 1
     fi
 
-    #remove auto login
-    log "Turn off auto login"
-    sudo raspi-config nonint do_boot_behaviour B1
+    # set auto login ==========================================================
+    AUTO_LOGIN="off"
+    if [ -f /boot/raspberry-pack/autologin.conf ]; then
+        AUTO_LOGIN="on"
+    fi
+
+    GUI_PACKAGE_OUTPUT=$(dpkg -l xserver-xorg)
+    if [[ $GUI_PACKAGE_OUTPUT == *"<none>"* ]]; then
+    echo "It's no GUI system"
+        # auto login to CLI active (B1 = autologin off)
+        if [[ $AUTO_LOGIN == *"on"* ]]; then
+            echo "auto-login: on"
+            sudo -u pi sudo raspi-config nonint do_boot_behaviour B2
+        else
+            echo "auto-login: off"
+            sudo -u pi sudo raspi-config nonint do_boot_behaviour B1
+        fi
+    else
+        echo "It's a GUI system"
+        # auto login to GUI active (B3 = autologin off)
+        if [[ $AUTO_LOGIN == *"on"* ]]; then
+            echo "auto-login: on"
+            sudo -u pi sudo raspi-config nonint do_boot_behaviour B4
+        else
+            echo "auto-login: off"
+            sudo -u pi sudo raspi-config nonint do_boot_behaviour B3
+        fi
+    fi
+    sudo dpkg-reconfigure lightdm
     sleep 1
 
-    #reboot for clean start
+    # reboot for clean start ==================================================
     log "Raspberry-pack installation done"
 
     #send udp broadcast to signal the installation is done
@@ -109,7 +147,7 @@ install_raspberry_pack () {
         /boot/raspberry-pack/run-after-boot.sh
     fi
 
-    # reset led to default behavior
+    # reset led to default behavior ===========================================
     echo mmc0 | sudo tee /sys/class/leds/led0/trigger
     rm logstream
     log "Final reboot"
@@ -118,5 +156,21 @@ install_raspberry_pack () {
 }
 
 REMOTE_IP=$(loadMasterIP)
+
+log "Check for network connection"
+CONNECTED=false
+for i in 1 2 3 4 5
+do
+    ping -q -w 1 -c 1 `ip r | grep default | cut -d ' ' -f 3` > /dev/null && CONNECTED=true || CONNECTED=false
+    if [ "$CONNECTED" = true ]; then
+        log "Connected to network"
+        break
+    fi
+    error "no connection. Wait 5 sec ..."
+    sleep 5
+done
+
+# create named pipe to log into that transmits the install_raspberry_pack logs
+echo "Transmit the terminal output to: ${REMOTE_IP}"
 mkfifo logstream
 nc $REMOTE_IP 2000 < logstream | install_raspberry_pack &> logstream

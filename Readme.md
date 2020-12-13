@@ -34,17 +34,20 @@ python wizard.py
 
 Create a folder inside `packages/`. Each package name has the prefix `raspberry-pack-`.
 
-| Filename                   | required | optional | use                                                                                                     |
-| -------------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `readme.md`                | ✔        |          | documentation & description for that package                                                            |
-| `wpa_supplicant.conf`      |          | ✔        | contains WiFi details to connect                                                                        |
-| `📦/apt-get-packages.conf` |          | ✔        | space-seperated list of packages to install via `sudo apt-get install`                                  |
-| `📦/hostname.conf`         |          | ✔        | defines hostname                                                                                        |
-| `📦/user-password.conf`    |          | ✔        | defines user's (`pi`) password                                                                          |
-| `📦/run-before-boot.sh`    |          | ✔        | script to run when the SD flashing is done. Executed on your Mac, e.g. to alter the config.txt on SD    |
-| `📦/run-on-boot.sh`        |          | ✔        | script to run after updating and installing apt packages                                                |
-| `📦/run-after-boot.sh`     |          | ✔        | script to run after the "installation done"-signal. Useful, when connection will drop                   |
-| `📦/*`                     |          | ✔        | add all your files you need for your script in here. In your script you can access it here `/boot/📦/*` |
+| Filename                   | required | use                                                                                                     |
+| -------------------------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `readme.md`                | ✔        | documentation & description for that package                                                            |
+| `wpa_supplicant.conf`      |          | contains WiFi details to connect                                                                        |
+| `📦/apt-get-packages.conf` |          | space-seperated list of packages to install via `sudo apt-get install`                                  |
+| `📦/hostname.conf`         |          | defines hostname                                                                                        |
+| `📦/user-password.conf`    |          | defines user's (`pi`) password                                                                          |
+| `📦/autologin.conf`        |          | when this file exists, the system will login automatically (CLI/GUI)                                    |
+| `📦/no-update.conf`        |          | when this file exists, the system will not update system packages (only use during development)         |
+| `📦/update-only.conf`      |          | when this file exists, the system will only update system packages                                      |
+| `📦/run-before-boot.sh`    |          | script to run when the SD flashing is done. Executed on your Mac, e.g. to alter the config.txt on SD    |
+| `📦/run-on-boot.sh`        |          | script to run after updating and installing apt packages                                                |
+| `📦/run-after-boot.sh`     |          | script to run after the "installation done"-signal. Useful, when connection will drop                   |
+| `📦/*`                     |          | add all your files you need for your script in here. In your script you can access it here `/boot/📦/*` |
 
 > 📦 = `raspberry-pack`
 >
@@ -74,6 +77,9 @@ Create a folder inside `packages/`. Each package name has the prefix `raspberry-
 - allow packages to ask questions as well in an easy way (e.g. AP will ask for `ssid` and `wpa-passphrase`)
 - put all features into sub-packages (MQTT broker, AP, Apache in a separate folder under raspberry-pack) to make package creation easier
 - create packages based on sub-packages (user can tick features he wants to have e.g. AP + NodeRed)
+- Add automatically the installers ssh key
+- run ansible script when system is setup
+- enable vnc (`sudo raspi-config nonint do_vnc %d`)
 
 ## Future packages / sub-packages
 
