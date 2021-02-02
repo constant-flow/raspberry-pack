@@ -72,15 +72,15 @@ install_raspberry_pack () {
 
     # install packages from master package ====================================
     if [ -f /boot/raspberry-pack/master-apt-get-packages.conf ]; then
-        log "Install packages via apt-get"
-        sudo apt-get install $(</boot/raspberry-pack/master-apt-get-packages.conf) -y
+        log "Install packages via apt"
+        sudo apt install $(</boot/raspberry-pack/master-apt-get-packages.conf) -y
         sleep 1
     fi
 
     # install packages from selected package ==================================
     if [ -f /boot/raspberry-pack/apt-get-packages.conf ]; then
-        log "Install packages via apt-get"
-        sudo apt-get install $(</boot/raspberry-pack/apt-get-packages.conf) -y
+        log "Install packages via apt"
+        sudo apt install $(</boot/raspberry-pack/apt-get-packages.conf) -y
         sleep 1
     fi
 
@@ -107,18 +107,21 @@ install_raspberry_pack () {
     # Change the hostname of the machine (find it later by <hostname>.local) ==
     if [ -f /boot/raspberry-pack/hostname.conf ]; then
         log "Adjust hostname"
+        echo "Hostname: '$(</boot/raspberry-pack/hostname.conf)'"
         sudo raspi-config nonint do_hostname $(</boot/raspberry-pack/hostname.conf)
         sleep 1
     fi
 
     # set auto login ==========================================================
+    log "Set login method"
     AUTO_LOGIN="off"
     if [ -f /boot/raspberry-pack/autologin.conf ]; then
         AUTO_LOGIN="on"
     fi
 
-    GUI_PACKAGE_OUTPUT=$(dpkg -l xserver-xorg)
-    if [[ $GUI_PACKAGE_OUTPUT == *"<none>"* ]]; then
+    # run to check if gui system is available, then check return code
+    dpkg -l xserver-xorg
+    if [ $? -ne 0 ]; then
     echo "It's no GUI system"
         # auto login to CLI active (B1 = autologin off)
         if [[ $AUTO_LOGIN == *"on"* ]]; then
@@ -166,7 +169,7 @@ install_raspberry_pack () {
     #send udp broadcast to signal the installation is done
     HOSTNAME=$(</boot/raspberry-pack/hostname.conf)
     IP=$(hostname -I)
-    log "INSTALLATION COMPLETED\n\n\aThe machine will be restarted soon so you can login via ssh:\n\t'ssh pi@${HOSTNAME}.local'\n\t'ssh pi@${IP}'\n"
+    log "INSTALLATION COMPLETED\n\n\aThe machine will be restarted soon so you can login via ssh:\n\tssh pi@${HOSTNAME}.local\n\tssh pi@${IP}\n"
 
     if [ -f /boot/raspberry-pack/run-after-boot.sh ]; then
         log "Additional script will be started.\n\nThe connection will drop. Wait for the green LED (ACT) to stop flashing, then the installation is done"
