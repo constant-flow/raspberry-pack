@@ -4,9 +4,23 @@
 
 ![CLI](assets/example-cli.png)
 
+# What is is good for?
+
+- Raspberry-Packs bundle a specific setup you want to clone/roll out on multiple devices or you want to share with friends or the internet
+- It installs packages, runs scripts, setup services on your Raspberry Pi similar to a configured image
+- Its aim is to reduce the manual overhead of installing scripts by hand with automation
+
+# Why not using an image
+
+- In contrast to an image, a Raspberry-Pack install an official distribution image first and based on that the rest
+- Every installation step and change is comprehensible upfront, whereas an image is a blackbox where you have no clue what was installed and done. Thus it's modular and developers can copy interesting sections from other Raspberry-Packs
+- Images are are huge and hard to trim down, Raspberry-Packs are tiny scripts and links to downloads
+- Raspberry-Packs are flexible e.g. WiFi or hostname are adjustable via the wizard. Adjusting a Raspberry-Pack is done in a text editor and doesn't require an export.
+- At installations it does the updating and upgrading automatically, so you always start with a solid OS
+
 # How to use Raspberry-Pack
 
-- Raspberry-Pack is designed for use with [Raspberry Pi](http://www.raspberrypi.org) version 1-4
+Raspberry-Pack is designed for use with [Raspberry Pi](http://www.raspberrypi.org) version 1-4
 
 ## The step by step wizard guides you through the installation process
 
@@ -68,7 +82,6 @@ Create a folder inside `packages/`. Each package name has the prefix `raspberry-
 
 ## Feature backlog
 
-- choose between Lite/Desktop version of Raspbian (right now its Lite only)
 - handle empty files in a better way
 - make username adjustable via `user-name.conf`
 - ask if all security relevant infos should be removed from the raspberry-pack (or zipped and encrypted)
