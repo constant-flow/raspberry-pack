@@ -6,6 +6,7 @@ import glob
 import os
 import re
 import sys
+import validators
 
 # =============================================================================
 
@@ -105,7 +106,29 @@ def shortenPackagePlusDescripton(p):
 
 
 packageDescriptionSeparator = " -> "
+customRepoLink = "Custom Git Repository Link -> Provide a git link to a Raspberry-Pack"
 
+def updatePackages():
+
+    print("Check for updated packages:\n")
+
+    os.chdir(startLocation)
+    os.chdir("./packages")
+    packages = glob.glob("raspberry-pack-*/")
+
+    checkedGitRepos = 0
+
+    for package in packages:
+        os.chdir(startLocation)
+        os.chdir("./packages")
+        if os.path.exists(package + "/.git"):
+            os.chdir("./" + package)
+            os.system("git config pull.ff only")
+            os.system("git pull")
+            checkedGitRepos = checkedGitRepos+1
+
+    if checkedGitRepos > 0:
+        print("Found "+str(checkedGitRepos)+" git based repositories, updated to newest version")
 
 def selectPackage():
     os.chdir(startLocation)
@@ -113,6 +136,8 @@ def selectPackage():
     packages = glob.glob("raspberry-pack-*/")
 
     packages = map(shortenPackagePlusDescripton, packages)
+    packages = list(packages)
+    packages.append(customRepoLink)
 
     packageQuestion = [
         {
@@ -125,14 +150,48 @@ def selectPackage():
 
     packageAnswer = prompt(packageQuestion)
 
-    # get rid of description and make name long again
-    packageAnswer['package'] = 'raspberry-pack-' + \
-        packageAnswer['package'].split(packageDescriptionSeparator)[0]+"/"
+    packageShortName = ""
 
-    packageShortName = re.sub('raspberry-pack-', '', packageAnswer['package'])
-    packageShortName = re.sub('\/', '', packageShortName)
+    if packageAnswer['package'] == customRepoLink:
+        customPackageQuestion = [
+            {
+                'type': 'input',
+                'name': 'repoUrl',
+                'message': '🌐 What the packages repo url?',
+                'default': ""
+            }
+        ]
 
-    packageAnswer['package'] = "raspberry-pack-"+packageShortName+"/"
+        customPackage = prompt(customPackageQuestion)
+        url = customPackage['repoUrl']
+        urlParts = url.split('/')
+        projectName = urlParts[len(urlParts)-1]
+
+        if not projectName.find("raspberry-pack-") == 0:
+            projectName = 'raspberry-pack-' + projectName
+
+        if not validators.url(url):
+            sys.exit("Stopped as a malformed url was provided: " + projectName)
+
+        os.system('git clone --depth 1 '+ url + ' '+ projectName)
+        packageAnswer['package'] = projectName + "/"
+
+        packageShortName = re.sub('raspberry-pack-', '', projectName)
+        packageShortName = re.sub('\/', '', packageShortName)
+
+        if not os.path.exists("./"+projectName+"/raspberry-pack/"):
+            os.system('rm -rf ./'+projectName)
+            sys.exit("No valid Raspberry-Pack selected (raspberry-pack folder missing), delete wrong data and cancel wizard")
+
+    else:
+        # get rid of description and make name long again
+        packageAnswer['package'] = 'raspberry-pack-' + \
+            packageAnswer['package'].split(packageDescriptionSeparator)[0]+"/"
+
+        packageShortName = re.sub('raspberry-pack-', '', packageAnswer['package'])
+        packageShortName = re.sub('\/', '', packageShortName)
+
+        packageAnswer['package'] = "raspberry-pack-"+packageShortName+"/"
     return [packageAnswer, packageShortName]
 
 
@@ -337,6 +396,9 @@ printIntro()
 hl()
 
 checkForFlashableImage()
+hl()
+
+updatePackages()
 hl()
 
 [packageAnswer, packageShortName] = selectPackage()
