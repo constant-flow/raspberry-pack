@@ -9,12 +9,14 @@
 - Raspberry-Packs bundle a specific setup you want to clone/roll out on multiple devices or you want to share with friends or the internet
 - It installs packages, runs scripts, setup services on your Raspberry Pi similar to a configured image
 - Its aim is to reduce the manual overhead of installing scripts by hand with automation
+- Raspberry-Packs can be added from a public git repository (e.g. [this](https://github.com/constant-flow/raspberry-pack-apache2), [all](promoted-packages.md)). These packages will check for updates on every execution of Raspberry-Pack
+- Raspberry-Packs can be used locally. Simply create a folder named `raspberry-pack-*` inside the `packages` directory
 
 # Why not using an image
 
-- In contrast to an image, a Raspberry-Pack install an official distribution image first and based on that the rest
+- In contrast to an image, a Raspberry-Pack installs an official distribution image first and based on that the rest
 - Every installation step and change is comprehensible upfront, whereas an image is a blackbox where you have no clue what was installed and done. Thus it's modular and developers can copy interesting sections from other Raspberry-Packs
-- Images are are huge and hard to trim down, Raspberry-Packs are tiny scripts and links to downloads
+- Images are huge and hard to trim down, Raspberry-Packs are tiny scripts and links to downloads
 - Raspberry-Packs are flexible e.g. WiFi or hostname are adjustable via the wizard. Adjusting a Raspberry-Pack is done in a text editor and doesn't require an export.
 - At installations it does the updating and upgrading automatically, so you always start with a solid OS
 

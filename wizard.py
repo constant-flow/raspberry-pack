@@ -6,7 +6,7 @@ import glob
 import os
 import re
 import sys
-import validators
+from giturlparse import parse
 
 # =============================================================================
 
@@ -181,7 +181,9 @@ def selectPackage():
         if not projectName.find("raspberry-pack-") == 0:
             projectName = 'raspberry-pack-' + projectName
 
-        if not validators.url(url):
+        projectName = re.sub('.git', '', projectName)
+
+        if not parse(url).valid:
             sys.exit("Stopped as a malformed url was provided: " + projectName)
 
         os.system('git clone --depth 1 '+ url + ' '+ projectName)
