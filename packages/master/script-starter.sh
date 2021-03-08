@@ -63,5 +63,9 @@ done
 
 # create named pipe to log into that transmits the init_raspberry_pack logs
 log "Transmit the terminal output to: ${REMOTE_IP}"
-mkfifo logstream
+if [ -p logstream ]; then
+    echo "logstream already available"
+else
+    mkfifo logstream
+fi
 nc $REMOTE_IP 2000 < logstream | init_raspberry_pack &> logstream
