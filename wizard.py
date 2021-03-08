@@ -83,11 +83,15 @@ def checkForFlashableImage():
 
 def shortenPackagePlusDescripton(p):
     description = "[No description]"
-    readmePath = './'+p+'readme.md'
+    readmePath = './'+p+'raspberry-pack.md'
+    gitPath = './'+p+'.git'
 
     # shorten name (without prefix and end-slash)
     shortPackageName = p[15:]
     shortPackageName = re.sub('\/', '', shortPackageName)
+
+    # check if is a git based package
+    isGitPackage = os.path.exists(gitPath)
 
     # add description
     if os.path.exists(readmePath):
@@ -95,6 +99,13 @@ def shortenPackagePlusDescripton(p):
         readmeFile = open(readmePath, 'r')
 
         description = readmeFile.readline()
+        description = re.sub('\n', '', description)
+
+        if isGitPackage:
+            description = "🟢 " + description
+        else:
+            description = "🔴 " + description
+
         remainingChars = maxChars - 4 - \
             len(shortPackageName) - len(packageDescriptionSeparator)
         if len(description) > remainingChars:
@@ -105,8 +116,8 @@ def shortenPackagePlusDescripton(p):
     return shortPackageName + packageDescriptionSeparator + description
 
 
-packageDescriptionSeparator = " -> "
-customRepoLink = "Custom Git Repository Link -> Provide a git link to a Raspberry-Pack"
+packageDescriptionSeparator = " → "
+customRepoLink = "[ADD GIT REPO]" + packageDescriptionSeparator + "Provide a git link to a Raspberry-Pack"
 
 def updatePackages():
 
