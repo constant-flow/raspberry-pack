@@ -9,7 +9,7 @@
 - Raspberry-Packs bundle a specific setup you want to clone/roll out on multiple devices or you want to share with friends or the internet
 - It installs packages, runs scripts, setup services on your Raspberry Pi similar to a configured image
 - Its aim is to reduce the manual overhead of installing scripts by hand with automation
-- Raspberry-Packs can be added from a public git repository (e.g. [this](https://github.com/constant-flow/raspberry-pack-apache2), [all](promoted-packages.md)). These packages will check for updates on every execution of Raspberry-Pack
+- Raspberry-Packs can be added from a public git repository (e.g. [example](https://github.com/constant-flow/raspberry-pack-apache2), [all promoted](promoted-packages.md)). These packages will check for updates on every execution of Raspberry-Pack
 - Raspberry-Packs can be used locally. Simply create a folder named `raspberry-pack-*` inside the `packages` directory
 
 # Why not using an image

@@ -6,14 +6,14 @@ When selecting a Raspberry-Pack in the wizard, the last option is to add a new r
 
 # Official packages
 
-| Name    | Description                                        | Link                                                                                                                              |
-| ------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| apache2 | **Simple Apache2 example:** Hosts a static website | [HTTPS](https://github.com/constant-flow/raspberry-pack-apache2) / [SSH](git@github.com:constant-flow/raspberry-pack-apache2.git) |
+| Name    | Description                                        | Link                                                               | SSH                                                       |
+| ------- | -------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------------------------- |
+| apache2 | **Simple Apache2 example:** Hosts a static website | [Details](https://github.com/constant-flow/raspberry-pack-apache2) | `git@github.com:constant-flow/raspberry-pack-apache2.git` |
 
 # User submitted packages
 
 ✨ Feel free to submit your packages as an issue using the prefix `[NEW-PACKAGE]` to your issue title
 
-| Name | Description | Link |
-| ---- | ----------- | ---- |
-| ⏳   |             |      |
+| Name | Description | Link | SSH |
+| ---- | ----------- | ---- | --- |
+| ⏳   |             |      |     |
