@@ -36,6 +36,17 @@ install_raspberry_pack () {
     log "Setup europe time zone"
     sudo timedatectl set-timezone Europe/Berlin
 
+    # load environment variables ==============================================
+    if [ -f /boot/raspberry-pack/.env ]; then
+        # enable to set global environment variables
+        log "Load environment variables"
+        cat /boot/raspberry-pack/.env
+        set -a
+        . /boot/raspberry-pack/.env
+        set +a
+        # disable to set global environment variables
+    fi
+
     # make sure network connection is available ===============================
     log "Check for network connection"
     CONNECTED=false

@@ -55,6 +55,7 @@ Create a folder inside `packages/`. Each package name has the prefix `raspberry-
 | `readme.md`                | ✔        | documentation & description for that package                                                            |
 | `wpa_supplicant.conf`      |          | contains WiFi details to connect                                                                        |
 | `📦/apt-get-packages.conf` |          | space-seperated list of packages to install via `sudo apt-get install`                                  |
+| `📦/env-inquirer.yaml`     |          | yaml file to ask for package specific input in the wizard – [more info](env-inquirer.md)                |
 | `📦/hostname.conf`         |          | defines hostname                                                                                        |
 | `📦/user-password.conf`    |          | defines user's (`pi`) password                                                                          |
 | `📦/autologin.conf`        |          | when this file exists, the system will login automatically (CLI/GUI)                                    |

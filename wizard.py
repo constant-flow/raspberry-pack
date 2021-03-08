@@ -7,6 +7,7 @@ import os
 import re
 import sys
 from giturlparse import parse
+import yaml
 
 # =============================================================================
 
@@ -207,6 +208,54 @@ def selectPackage():
         packageAnswer['package'] = "raspberry-pack-"+packageShortName+"/"
     return [packageAnswer, packageShortName]
 
+def enterPackageVariables():
+    packageName = packageAnswer['package']
+    os.chdir(startLocation)
+
+    pathOfPackageQuestions = "./packages/" + packageName + "raspberry-pack/env-inquirer.yaml"
+    pathOfEnvFile = "./packages/" + packageName + "raspberry-pack/.env"
+
+    if not os.path.exists(pathOfPackageQuestions):
+        return
+
+    if os.path.exists(pathOfEnvFile):
+        print("[0;35m\n═══ Current .env file: ═══[0m")
+        with open(pathOfEnvFile, 'r') as f:
+            print(f.read())
+
+        overwriteEnvFileQuestion = [
+            {
+                'type': 'confirm',
+                'message': "These environment variables are already existing.\n  Do you want to overwrite them?",
+                'name': 'overwriteEnv',
+                'default': False,
+            }
+        ]
+
+        overwriteEnvFileQuestionAnswer = prompt(overwriteEnvFileQuestion)
+        if not overwriteEnvFileQuestionAnswer["overwriteEnv"]:
+            return
+
+
+    with open(pathOfPackageQuestions, 'r') as stream:
+        try:
+            questions = yaml.safe_load(stream)
+            environmentVarsAnswers = prompt(questions["environmentVars"])
+            envFile = open(pathOfEnvFile, 'w+')
+
+            for key in environmentVarsAnswers:
+                value = environmentVarsAnswers[key]
+                if isinstance(value, list):
+                    valueSeparator = ","
+                    value = valueSeparator.join(value)
+                envFile.write(key + "=\"" + value + "\"\n")
+
+            envFile.truncate()
+            envFile.close()
+
+        except yaml.YAMLError as exc:
+            print(exc)
+
 
 def selectDisk():
     print("[0;35m  \n Available Disks:\n ════════════════\n [0m")
@@ -274,7 +323,7 @@ def waitForRaspberryToRespond():
     print("Live: injection phase")
     os.system(cmdWaitForLiveLog)
 
-    print("\nLive: installing phase")
+    print("\nLive: installing phase (wait for reboot)")
     # log installation phase
     os.system(cmdWaitForLiveLog)
 
@@ -415,6 +464,7 @@ updatePackages()
 hl()
 
 [packageAnswer, packageShortName] = selectPackage()
+enterPackageVariables()
 hl()
 
 setWiFiCredentials()
