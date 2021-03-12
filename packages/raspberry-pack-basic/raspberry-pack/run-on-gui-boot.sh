@@ -1,0 +1,1 @@
+echo "Basic pack - ran on gui boot" >> /home/pi/raspberry-pack.log

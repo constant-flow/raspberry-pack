@@ -17,3 +17,14 @@ When selecting a Raspberry-Pack in the wizard, the last option is to add a new r
 | Name | Description | Link | SSH |
 | ---- | ----------- | ---- | --- |
 | ⏳   |             |      |     |
+
+# Ideas for packages
+
+| Name            | Description                                  |
+| --------------- | -------------------------------------------- |
+| NodeJs          | Run NodeJs server pulled from repository     |
+| Saltstack       | Automate Pi via Saltstack from repository    |
+| Puppet          | Automate Pi via Puppet from repository       |
+| Docker          | Automate Pi via docker image from a registry |
+| Presentation-Pi | Sets up a Pi to display images and videos    |
+| File server     | Sets up a Pi to share drive via network      |

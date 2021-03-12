@@ -153,6 +153,12 @@ install_raspberry_pack () {
             sudo -u pi sudo raspi-config nonint do_boot_behaviour B3
         fi
         sudo dpkg-reconfigure lightdm
+
+        # set autostart script on first gui boot, as only then, some files are created
+        if [ -f /boot/raspberry-pack/gui-first-boot.sh ]; then
+            sudo cp /etc/xdg/lxsession/LXDE-pi/autostart /etc/xdg/lxsession/LXDE-pi/autostart.bak
+            echo "@lxterminal -e /bin/bash /boot/raspberry-pack/gui-first-boot.sh" | sudo tee -a /etc/xdg/lxsession/LXDE-pi/autostart
+        fi
     fi
     sleep 1
 
