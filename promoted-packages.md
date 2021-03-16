@@ -6,9 +6,11 @@ When selecting a Raspberry-Pack in the wizard, the last option is to add a new r
 
 # Official packages
 
-| Name    | Description                                        | Link                                                               | SSH                                                       |
-| ------- | -------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------------------------- |
-| apache2 | **Simple Apache2 example:** Hosts a static website | [Details](https://github.com/constant-flow/raspberry-pack-apache2) | `git@github.com:constant-flow/raspberry-pack-apache2.git` |
+| Name         | Description                                        | Link                                                                    | SSH                                                            |
+| ------------ | -------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------- |
+| apache2      | **Simple Apache2 example:** Hosts a static website | [Details](https://github.com/constant-flow/raspberry-pack-apache2)      | `git@github.com:constant-flow/raspberry-pack-apache2.git`      |
+| docker       | **Docker run:** pull image and run                 | [Details](https://github.com/constant-flow/raspberry-pack-docker)       | `https://github.com/constant-flow/raspberry-pack-docker`       |
+| ansible-pull | **Pull:** clones image and hosts via ansible       | [Details](https://github.com/constant-flow/raspberry-pack-ansible-pull) | `git@github.com:constant-flow/raspberry-pack-ansible-pull.git` |
 
 # User submitted packages
 
