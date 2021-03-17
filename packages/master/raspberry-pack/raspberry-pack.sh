@@ -115,14 +115,6 @@ install_raspberry_pack () {
         fi
     fi
 
-    # Change the hostname of the machine (find it later by <hostname>.local) ==
-    if [ -f /boot/raspberry-pack/hostname.conf ]; then
-        log "Adjust hostname"
-        echo "Hostname: '$(</boot/raspberry-pack/hostname.conf)'"
-        sudo raspi-config nonint do_hostname $(</boot/raspberry-pack/hostname.conf)
-        sleep 1
-    fi
-
     # set auto login ==========================================================
     log "Set login method"
     AUTO_LOGIN="off"
@@ -200,6 +192,14 @@ install_raspberry_pack () {
         sudo cp /boot/raspberry-pack/raspberry-pack.service /lib/systemd/system/
         sudo systemctl start raspberry-pack.service
         sudo systemctl enable raspberry-pack.service
+    fi
+
+    # Change the hostname of the machine (find it later by <hostname>.local) ==
+    if [ -f /boot/raspberry-pack/hostname.conf ]; then
+        log "Adjust hostname"
+        echo "Hostname: '$(</boot/raspberry-pack/hostname.conf)'"
+        sudo raspi-config nonint do_hostname $(</boot/raspberry-pack/hostname.conf)
+        sleep 1
     fi
 
     # reset led to default behavior ===========================================
