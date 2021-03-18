@@ -10,7 +10,7 @@ When selecting a Raspberry-Pack in the wizard, the last option is to add a new r
 | ------------ | -------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------- |
 | apache2      | **Simple Apache2 example:** Hosts a static website | [Details](https://github.com/constant-flow/raspberry-pack-apache2)      | `git@github.com:constant-flow/raspberry-pack-apache2.git`      |
 | docker       | **Docker run:** pull image and run                 | [Details](https://github.com/constant-flow/raspberry-pack-docker)       | `https://github.com/constant-flow/raspberry-pack-docker`       |
-| ansible-pull | **Pull:** clones image and hosts via ansible       | [Details](https://github.com/constant-flow/raspberry-pack-ansible-pull) | `git@github.com:constant-flow/raspberry-pack-ansible-pull.git` |
+| ansible-pull | **Pull:** clones playbook and hosts via ansible    | [Details](https://github.com/constant-flow/raspberry-pack-ansible-pull) | `git@github.com:constant-flow/raspberry-pack-ansible-pull.git` |
 
 # User submitted packages
 
@@ -22,11 +22,10 @@ When selecting a Raspberry-Pack in the wizard, the last option is to add a new r
 
 # Ideas for packages
 
-| Name            | Description                                  |
-| --------------- | -------------------------------------------- |
-| NodeJs          | Run NodeJs server pulled from repository     |
-| Saltstack       | Automate Pi via Saltstack from repository    |
-| Puppet          | Automate Pi via Puppet from repository       |
-| Docker          | Automate Pi via docker image from a registry |
-| Presentation-Pi | Sets up a Pi to display images and videos    |
-| File server     | Sets up a Pi to share drive via network      |
+| Name            | Description                               |
+| --------------- | ----------------------------------------- |
+| NodeJs          | Run NodeJs server pulled from repository  |
+| Saltstack       | Automate Pi via Saltstack from repository |
+| Puppet          | Automate Pi via Puppet from repository    |
+| Presentation-Pi | Sets up a Pi to display images and videos |
+| File server     | Sets up a Pi to share drive via network   |
