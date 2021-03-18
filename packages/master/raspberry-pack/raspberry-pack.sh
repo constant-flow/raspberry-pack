@@ -99,7 +99,7 @@ install_raspberry_pack () {
     if [ -f /boot/raspberry-pack/run-on-boot.sh ]; then
         chmod +x /boot/raspberry-pack/run-on-boot.sh
         log "Run defined scripts"
-        /boot/raspberry-pack/run-on-boot.sh
+        sudo -u pi /boot/raspberry-pack/run-on-boot.sh
         sleep 1
     fi
 
