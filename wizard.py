@@ -248,7 +248,7 @@ def enterPackageVariables():
                 if isinstance(value, list):
                     valueSeparator = ","
                     value = valueSeparator.join(value)
-                envFile.write(key + "=\"" + value + "\"\n")
+                envFile.write(key + "='" + value + "'\n")
 
             envFile.truncate()
             envFile.close()
