@@ -5,7 +5,7 @@
 
 ![CLI](assets/example-cli.png)
 
-# What is is good for?
+# What is good for?
 
 - Raspberry-Packs bundle a specific setup you want to clone/roll out on multiple devices or you want to share with friends or the internet
 - It installs packages, runs scripts, setup services on your Raspberry Pi similar to a configured image
