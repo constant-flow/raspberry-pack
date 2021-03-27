@@ -10,7 +10,18 @@ while [ $# -gt 0 ]; do
 done
 
 rm *.img
-curl -L $url -o temp.zip
+
+if command -v curl &> /dev/null
+then
+    # osx default
+    echo "Use curl to download"
+    curl -L $url -o temp.zip
+else
+    # linux default
+    echo "Use wget to download"
+    wget -O temp.zip --show-progress $url
+fi
+
 unzip temp.zip
 rm temp.zip
 mv *.img raspberry-pack.img
