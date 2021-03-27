@@ -1,4 +1,4 @@
-#!/usr/bin/env pyth
+#!/usr/bin/env python3
 # from __future__ import print_function, unicode_literals
 from PyInquirer import prompt  # , print_json
 
@@ -15,6 +15,37 @@ import yaml
 def hl():  # prints a horizontal line
     print("────────────────────────────────────────────────────────────────────────────────")
 
+def exitprompt():
+    exitQuestion = [
+            {
+                'type': 'confirm',
+                'message': "❌ Do you want to exit?",
+                'name': 'exit',
+                'default': False,
+            },
+        ]
+
+    exitAnswer = prompt(exitQuestion)
+
+    if exitAnswer == {} or exitAnswer["exit"]:
+        exit(0)
+    
+    print()
+
+
+
+def promptSecurely(questions, quitOnEmptyInput=True):
+    while True:
+        reply = prompt(questions)
+        if not reply == {}:
+            break
+        else:
+            if quitOnEmptyInput:
+                exitprompt()
+            else:
+                print("🎹 Please use the keyboard. Quit with 'Cancel'\n")
+    return reply
+
 
 def printIntro():
     os.chdir(startLocation)
@@ -22,7 +53,6 @@ def printIntro():
     os.system("cat ./assets/raspberry-pack.art")
     print("\nRaspberry-Pack helps you to setup your Raspberry in no time.\nNo keyboard, mouse, monitor or ssh needed!\n\n This tool helps to:\n ═══════════════════\n 1.) Download the newest OS image\n 2.) Select a pre-configured package\n 3.) flash your SD card\n 4.) informs you, when everything is done\n 5.) gives you the RPi`s IP and hostname so you can SSH into it\n")
     print(" (To navigate use arrow keys, enter and space)")
-    print(" (Don't use mouse clicks! ¯\_(ツ)_ /¯ issue: #6)\n")
     print("Make sure you have inserted an SD card.")
 
 
@@ -51,7 +81,7 @@ def checkForFlashableImage():
                 'default': False,
             },
         ]
-        refreshImage = prompt(refreshExistingImage)
+        refreshImage = promptSecurely(refreshExistingImage)
 
         downloadFreshImage = refreshImage['refreshImage']
 
@@ -65,7 +95,10 @@ def checkForFlashableImage():
                 'choices': imagesToInstall
             },
         ]
-        imageDownload = prompt(downloadQuestion)
+
+        imageDownload = promptSecurely(downloadQuestion, False)
+
+        print(imageDownload)
 
         if imageDownload['imageUrl'] == 'Cancel':
             hl()
@@ -160,7 +193,7 @@ def selectPackage():
         },
     ]
 
-    packageAnswer = prompt(packageQuestion)
+    packageAnswer = promptSecurely(packageQuestion)
 
     packageShortName = ""
 
@@ -174,7 +207,7 @@ def selectPackage():
             }
         ]
 
-        customPackage = prompt(customPackageQuestion)
+        customPackage = promptSecurely(customPackageQuestion)
         url = customPackage['repoUrl']
         urlParts = url.split('/')
         projectName = urlParts[len(urlParts)-1]
@@ -232,7 +265,7 @@ def enterPackageVariables():
             }
         ]
 
-        overwriteEnvFileQuestionAnswer = prompt(overwriteEnvFileQuestion)
+        overwriteEnvFileQuestionAnswer = promptSecurely(overwriteEnvFileQuestion)
         if not overwriteEnvFileQuestionAnswer["overwriteEnv"]:
             return
 
@@ -240,7 +273,7 @@ def enterPackageVariables():
     with open(pathOfPackageQuestions, 'r') as stream:
         try:
             questions = yaml.safe_load(stream)
-            environmentVarsAnswers = prompt(questions["environmentVars"])
+            environmentVarsAnswers = promptSecurely(questions["environmentVars"])
             envFile = open(pathOfEnvFile, 'w+')
 
             for key in environmentVarsAnswers:
@@ -272,7 +305,7 @@ def selectDisk():
   \n     enter nothing and confirm.\n\n     Only give a number (e.g. for "disk4" enter "4").',
         },
     ]
-    volumeAnswer = prompt(volumeQuestion)
+    volumeAnswer = promptSecurely(volumeQuestion)
     if volumeAnswer['volumeNumber'] == "0" or volumeAnswer['volumeNumber'] == "1":
         print("Seem like you try to overwrite a system drive. We stopped you doing so!")
         sys.exit(4)
@@ -301,7 +334,7 @@ def flashDrive():
     cmdFormatDrive = "sudo ./format-drive.sh " + \
         volumeAnswer['volumeNumber'] + " " + packageShortName
 
-    finalConfirmation = prompt(flashDriveQuestion)
+    finalConfirmation = promptSecurely(flashDriveQuestion)
 
     hl()
     if finalConfirmation['finalConfirmation']:
@@ -375,7 +408,7 @@ def setWiFiCredentials():
             'default': currentPassphrase
         }
     ]
-    wifiAnswer = prompt(wifiQuestion)
+    wifiAnswer = promptSecurely(wifiQuestion)
 
     fileWifi = open('wpa_supplicant.conf', 'w+')
     fileWifi.write('\
@@ -410,7 +443,7 @@ def setHostname():
             'default': hostname
         }
     ]
-    hostnameAnswer = prompt(hostnameQuestion)
+    hostnameAnswer = promptSecurely(hostnameQuestion)
 
     hostname = hostnameAnswer['hostname']
 
@@ -439,7 +472,7 @@ def setPassword():
             'default': password
         }
     ]
-    passwordAnswer = prompt(passwordQuestion)
+    passwordAnswer = promptSecurely(passwordQuestion)
 
     password = passwordAnswer['password']
 
