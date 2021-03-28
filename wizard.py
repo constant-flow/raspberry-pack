@@ -8,6 +8,7 @@ import re
 import sys
 from giturlparse import parse
 import yaml
+from sys import platform
 
 # =============================================================================
 
@@ -289,22 +290,66 @@ def enterPackageVariables():
         except yaml.YAMLError as exc:
             print(exc)
 
+def makeDriveOption(driveLine):
+    elements = driveLine.split()
+    if len(elements) < 2:
+        return ""
+    return elements[0] + "    (Size:"+ elements[1] + ")"
+    
 
 def selectDisk():
     print("[0;35m  \n Available Disks:\n ════════════════\n [0m")
-    cmdListDrives = 'diskutil list physical'
-    os.system(cmdListDrives)
+    cmdListDrives = ''
+    cmdListDrivesHuman = ''
+    driveOptions = []
+
+    if platform == "linux" or platform == "linux2":
+        # linux
+        cmdListDrivesHuman = 'lsblk -p -o NAME,SIZE,MOUNTPOINT,RM,RM | grep "1  1"'
+        cmdListDrives = 'lsblk -p -o NAME,SIZE,RM,RM,MOUNTPOINT | grep --color=never "1  1" | grep -v "media"'
+        drives = os.popen(cmdListDrives).read().split("\n")
+
+        driveOptions = map(makeDriveOption, drives)
+        driveOptions = filter(lambda x: not x=="", driveOptions)
+
+    elif platform == "darwin":
+        # mac
+        cmdListDrivesHuman = 'diskutil list physical'
+        cmdListDrives = 'diskutil list physical'
+
+
+        
+    #elif platform == "win32":
+    #   cmdListDrives = 'echo "windows is not supported; exit(1);"'
+
+    if cmdListDrives == '':
+        print(" ❌ Sorry, your OS is not supported. \n")
+        exit(1)
+
+    os.system(cmdListDrivesHuman)
 
     hl()
 
+#     volumeQuestion = [
+#         {
+#             'type': 'input',
+#             'name': 'volumeNumber',
+#             'message': '💾 Choose the disk to flash from the list shown above.\n     In case you don\'t see a matching disk (name / size),\
+#   \n     enter nothing and confirm.\n\n     Only give a number (e.g. for "disk4" enter "4").',
+#         },
+#     ]
+
     volumeQuestion = [
         {
-            'type': 'input',
+            'type': 'list',
             'name': 'volumeNumber',
             'message': '💾 Choose the disk to flash from the list shown above.\n     In case you don\'t see a matching disk (name / size),\
   \n     enter nothing and confirm.\n\n     Only give a number (e.g. for "disk4" enter "4").',
+            'choices': driveOptions
         },
     ]
+
+
     volumeAnswer = promptSecurely(volumeQuestion)
     if volumeAnswer['volumeNumber'] == "0" or volumeAnswer['volumeNumber'] == "1":
         print("Seem like you try to overwrite a system drive. We stopped you doing so!")
