@@ -2,6 +2,7 @@
 
 | ![raspberry-pack.png](assets/raspberry-pack.png) | **Why Raspberry-Pack:** Don't flash each Raspberry Pi by hand, but automate things and make it reusable, and all that headlessly: No keyboard, no mouse, no monitor, no ssh needed.<br><br> **Headless, easy, fast and reproducible** |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     |     |
 
 ![CLI](assets/example-cli.png)
 
